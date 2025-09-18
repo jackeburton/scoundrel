@@ -1,0 +1,9 @@
+# Build outputs
+/build
+/build_debug
+
+# macOS debug symbol folder
+/build_debug.dSYM
+
+# OS metadata (optional)
+.DS_Store
