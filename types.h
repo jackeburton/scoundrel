@@ -5,61 +5,55 @@
 #define ROOM_SIZE 4
 #define STARTING_HEALTH 20
 
-struct Weapon
+typedef struct Weapon
 {
     int damage;
-};
+} Weapon;
 
-struct Player
-{
+typedef struct {
     struct Weapon weapon;
     int health;
     int last_defeated;
-};
+} Player;
 
-struct Enemy
-{
+typedef struct {
     int damage;
-};
+} Enemy;
 
-struct Potion {
+typedef struct {
     int healing;
-};
+} Potion;
 
-enum EntityType
-{
+enum EntityType{
     ENTITY_WEAPON,
     ENTITY_ENEMY,
     ENTITY_POTION,
     ENTITY_NONE
 };
 
-struct Entity
-{
+typedef struct {
     enum EntityType type;
-    union 
-    {
-        struct Weapon weapon;
-        struct Enemy enemy;
-        struct Potion potion;
+    union {
+        Weapon weapon;
+        Enemy enemy;
+        Potion potion;
     };
-    
-};
+} Entity;
 
-struct Dungeon {
-    struct Entity entities[NUMBER_OF_CARDS];
+typedef struct {
+    Entity entities[NUMBER_OF_CARDS];
     int head;
     int tail;
-};
+} Dungeon;
 
-struct Room {
-    struct Entity entities[ROOM_SIZE];
-};
+typedef struct {
+    Entity entities[ROOM_SIZE];
+} Room;
 
-struct GameState {
-    struct Dungeon dungeon;
-    struct Room room;
-    struct Player player;
-};
+typedef struct {
+    Dungeon dungeon;
+    Room room;
+    Player player;
+} GameState;
 
 #endif
