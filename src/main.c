@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 #include "raylib.h"
 
 
@@ -63,7 +65,27 @@ void usePotion(Player *player, Potion *potion) {
     }
 }
 
-void nextRoom() {}
+bool nextRoom(Room *room, Dungeon *dungeon) {
+    int i;
+    int numOfEntitiesInRoom = 0;
+    for (i = 0; i < sizeof(room->entities) / sizeof(room->entities[0]); i++){
+        if (!room->entities[i].discarded){
+            printf("%d in the entities is not discarded", i);
+            numOfEntitiesInRoom++;
+        }
+        if (numOfEntitiesInRoom > 1){
+            printf("Room not cleared %d left!\n", numOfEntitiesInRoom);
+            return false;
+        }
+    }
+    for (i = 0; i < sizeof(room->entities) / sizeof(room->entities[0]); i++){
+        if (room->entities[i].discarded){
+            room->entities[i] = spawnEntity(dungeon);
+        }
+    }
+    printf("new room\n");
+    return true;
+}
 
 void interractWithEntity(Room *room, Player *player, int index) {
     Entity *room_entity = &room->entities[index-1];
@@ -83,37 +105,52 @@ void interractWithEntity(Room *room, Player *player, int index) {
     }
 }
 
-
-
+//
 //init
+void swap(Entity *a, Entity *b) {
+    Entity temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Fisher-Yates shuffle for Object array
+void shuffle(Entity *array, int n) {
+    for (int i = n - 1; i > 0; i--) {
+        int j = rand() % (i + 1);
+        swap(&array[i], &array[j]);
+    }
+}
+
 Dungeon initDungeon(int num_of_entities){
     // populate dungeon
     int i;
     Dungeon dungeon;
     for (i = 0; i < num_of_entities; i++) {
-        if (i == 0){
+        if (i % 3 == 0){
             Entity newEntity;
             newEntity.type = ENTITY_ENEMY;
-            newEntity.enemy.damage = 5;
+            newEntity.enemy.damage = (i + 6) / 3;
             newEntity.discarded = false;
             dungeon.entities[i] =  newEntity;
             printf("adding enemy to dungeon at %d\n", i);
-        } else if (i == 1){
+        } else if (i % 3 == 1){
             Entity newEntity;
             newEntity.type = ENTITY_POTION;
-            newEntity.potion.healing = 5;
+            newEntity.potion.healing = (i + 5) / 3;
             newEntity.discarded = false;
             dungeon.entities[i] =  newEntity;
             printf("adding potion to dungeon at %d\n", i);
         } else {
             Entity newEntity;
             newEntity.type = ENTITY_WEAPON;
-            newEntity.weapon.damage = i;
+            newEntity.weapon.damage = (i + 4);
             newEntity.discarded = false;
             dungeon.entities[i] =  newEntity;
             printf("adding weapon to dungeon at %d\n", i);
         }
     }
+    int n = sizeof(dungeon.entities) / sizeof(dungeon.entities[0]);
+    shuffle(dungeon.entities, n);
     dungeon.head = 0;
     dungeon.tail = num_of_entities - 1;
 
@@ -158,6 +195,7 @@ GameState initGame(int numberOfCards, int startingHealth, int roomSize){
 }
 
 int main(void) {
+    srand(time(NULL));
     InitWindow(800, 400, "raylib window");
     SetTargetFPS(60);
 
@@ -169,6 +207,7 @@ int main(void) {
         if(IsKeyDown(KEY_TWO)) interractWithEntity(&gameState.room, &gameState.player, 2);
         if(IsKeyDown(KEY_THREE)) interractWithEntity(&gameState.room, &gameState.player, 3);
         if(IsKeyDown(KEY_FOUR)) interractWithEntity(&gameState.room, &gameState.player, 4);
+        if(IsKeyDown(KEY_N)) nextRoom(&gameState.room, &gameState.dungeon);
 
         BeginDrawing();
 

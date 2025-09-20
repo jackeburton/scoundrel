@@ -1,7 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#define NUMBER_OF_CARDS 4 
+#define NUMBER_OF_CARDS 30 
 #define ROOM_SIZE 4
 #define STARTING_HEALTH 20
 
