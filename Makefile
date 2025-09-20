@@ -2,9 +2,9 @@ CC = cc
 CFLAGS = -O2           # default release flags
 DEBUGFLAGS = -g -O0    # debug flags
 
-SRC = main.c
-OUT = build
-DEBUG_OUT = build_debug
+SRC = src/main.c
+OUT = build/build
+DEBUG_OUT = build/build_debug
 
 RAYLIB_CFLAGS  = $(shell pkg-config --cflags raylib)
 RAYLIB_LIBS    = $(shell pkg-config --libs raylib)

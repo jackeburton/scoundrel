@@ -1,7 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#define NUMBER_OF_CARDS 60
+#define NUMBER_OF_CARDS 4 
 #define ROOM_SIZE 4
 #define STARTING_HEALTH 20
 
@@ -38,6 +38,7 @@ typedef struct {
         Enemy enemy;
         Potion potion;
     };
+    bool discarded;
 } Entity;
 
 typedef struct {
@@ -46,6 +47,7 @@ typedef struct {
     int tail;
 } Dungeon;
 
+// TODO make this a Pointer to the entities in the Dungeon!
 typedef struct {
     Entity entities[ROOM_SIZE];
 } Room;
