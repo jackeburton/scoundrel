@@ -39,11 +39,11 @@ Entity returnEntity(Dungeon *dungeon){
 // which to interract with based on what type it is
 void takeWeapon(Player *player, Weapon *weapon){
     player->weapon = *weapon;
-    player->last_defeated = 0;
+    player->last_defeated = 999;
 } 
 
 bool fightEnemy(Player *player, Enemy *enemy) {
-    if (enemy->damage < player->last_defeated){
+    if (enemy->damage > player->last_defeated){
         return false;
     }
     if (enemy->damage >= player->health){
@@ -70,7 +70,7 @@ bool nextRoom(Room *room, Dungeon *dungeon) {
     int numOfEntitiesInRoom = 0;
     for (i = 0; i < sizeof(room->entities) / sizeof(room->entities[0]); i++){
         if (!room->entities[i].discarded){
-            printf("%d in the entities is not discarded", i);
+            printf("%d in the entities is not discarded \n", i);
             numOfEntitiesInRoom++;
         }
         if (numOfEntitiesInRoom > 1){
@@ -121,10 +121,52 @@ void shuffle(Entity *array, int n) {
     }
 }
 
-Dungeon initDungeon(int num_of_entities){
+Entity createEnemy(int damage){
+    Entity newEntity;
+    newEntity.type = ENTITY_ENEMY;
+    newEntity.enemy.damage = damage;
+    newEntity.discarded = false;
+    return newEntity;
+}
+
+Entity createPotion(int healing){
+    Entity newEntity;
+    newEntity.type = ENTITY_POTION;
+    newEntity.potion.healing = healing;
+    newEntity.discarded = false;
+    return newEntity;
+
+}
+
+Entity createWeapon(int damage){
+    Entity newEntity;
+    newEntity.type = ENTITY_WEAPON;
+    newEntity.weapon.damage = (damage);
+    newEntity.discarded = false;
+    return newEntity;
+
+}
+
+Dungeon initDungeon(
+    int num_of_weapons,
+    int num_of_enemies,
+    int num_of_potions
+){
     // populate dungeon
     int i;
+    int j = 0;
     Dungeon dungeon;
+    for (i = 0; i < num_of_weapons; i++, j++){
+        dungeon.entities[j] = createWeapon(i + 1);
+    }
+    for (i = 0; i < num_of_enemies; i++, j++){
+        int scale = (i / 2) + 1;
+        dungeon.entities[j] = createEnemy(scale);
+    } 
+    for (i = 0; i < num_of_potions; i++, j++){
+        dungeon.entities[j] = createPotion(i + 1);
+    }
+    /*
     for (i = 0; i < num_of_entities; i++) {
         if (i % 3 == 0){
             Entity newEntity;
@@ -149,10 +191,11 @@ Dungeon initDungeon(int num_of_entities){
             printf("adding weapon to dungeon at %d\n", i);
         }
     }
+    */
     int n = sizeof(dungeon.entities) / sizeof(dungeon.entities[0]);
     shuffle(dungeon.entities, n);
     dungeon.head = 0;
-    dungeon.tail = num_of_entities - 1;
+    dungeon.tail = j;
 
     return dungeon;
 }
@@ -160,7 +203,7 @@ Dungeon initDungeon(int num_of_entities){
 Player initPlayer(int starting_health){
     Player player;
     player.health = starting_health;
-    player.last_defeated = 0;
+    player.last_defeated = 999;
     Weapon startingWeapon;
     startingWeapon.damage = 0;
     player.weapon = startingWeapon;
@@ -184,7 +227,7 @@ Room initRoom(Dungeon *dungeon, int roomSize){
 }
 
 GameState initGame(int numberOfCards, int startingHealth, int roomSize){
-    Dungeon dungeon = initDungeon(NUMBER_OF_CARDS);
+    Dungeon dungeon = initDungeon(10, 26, 10);
     Player player = initPlayer(STARTING_HEALTH);
     Room room = initRoom(&dungeon, ROOM_SIZE); 
     GameState gameState;
