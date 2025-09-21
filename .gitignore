@@ -1,6 +1,7 @@
 # Build outputs
 /build
 /build_debug
+output.txt
 
 # macOS debug symbol folder
 /build_debug.dSYM
