@@ -1,5 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
+ 
+#include <stdbool.h>
 
 #define NUMBER_OF_CARDS 46 
 #define ROOM_SIZE 4
