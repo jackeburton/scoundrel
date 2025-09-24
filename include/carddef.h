@@ -16,9 +16,9 @@ typedef void (*CardEffectFn)(CardDef *self, GameState *gameState);
 CardDef *CardDef_create(char *name, Texture2D sprite, CardType type, int stat, CardEffectFn interact);
 void CardDef_destroy(CardDef *cardDef);
 
-void CardDef_interact(CardDef *cardDef, GameState *gameState);
+CardEffectFn *CardDef_getInteract(CardDef *cardDef, GameState *gameState);
 
-int CardDef_getStat(CardDef *cardDef);
+void CardDef_getStat(CardDef *cardDef);
 
 #endif
 
