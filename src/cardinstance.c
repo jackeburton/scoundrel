@@ -22,3 +22,7 @@ void CardInstance_destroy(CardInstance *cardInstance){free(cardInstance);};
 void CardInstance_interact(CardInstance *cardInstance, GameState *gameState){
     CardDef_getInteract(cardInstance->cardDef)(cardInstance->cardDef, gameState);
 };
+
+Texture2D CardInstance_getSprite(CardInstance *cardInstance){
+    return CardDef_getSprite(cardInstance->cardDef);
+};

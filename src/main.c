@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "../include/carddef.h"
 #include "../include/cardinstance.h"
+#include "../include/render.h"
 
 void potion_heal(CardDef *cardDef, GameState *gameState){
     printf("Potion is healing\n");
@@ -12,7 +13,7 @@ int main(void) {
     InitWindow(800, 400, "raylib window");
     SetTargetFPS(60);
 
-    Image potion_image = LoadImage("../resources/potion.png");
+    Image potion_image = LoadImage("resources/potion.png");
     Texture2D potion_texture = LoadTextureFromImage(potion_image);
     UnloadImage(potion_image);
 
@@ -25,12 +26,15 @@ int main(void) {
 
     CardInstance_interact(potion_1, gameState);
 
+    LibraryInstanceRenderObject *potionRenderObject = RenderObject_create(potion_1, 200, 100);
+
     while (!WindowShouldClose()){
         
 
         BeginDrawing();
 
             ClearBackground(BLACK);
+            RenderObject_render(potionRenderObject);
              
 
         EndDrawing();

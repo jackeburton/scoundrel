@@ -22,5 +22,7 @@ int *CardDef_getStat(CardDef *cardDef);
 
 char *CardDef_getName(CardDef *cardDef);
 
+Texture2D CardDef_getSprite(CardDef *cardDef);
+
 #endif
 
