@@ -12,10 +12,13 @@ CardInstance *CardInstance_create(CardDef *cardDef){
 
     cardInstance->cardDef = cardDef;
 
-    //TODO change this to print the name
-    printf("made new card instance of card : ");
+    printf("made new card instance of card : %s\n", CardDef_getName(cardInstance->cardDef));
 
     return cardInstance;
 };
 
 void CardInstance_destroy(CardInstance *cardInstance){free(cardInstance);};
+
+void CardInstance_interact(CardInstance *cardInstance, GameState *gameState){
+    CardDef_getInteract(cardInstance->cardDef)(cardInstance->cardDef, gameState);
+};

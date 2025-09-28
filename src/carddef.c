@@ -32,8 +32,10 @@ void CardDef_destroy(CardDef *cardDef){
     free(cardDef);
 };
 
-void CardDef_interact(CardDef *cardDef, GameState *gameState){
-    cardDef->effect(cardDef, gameState);
+CardEffectFn CardDef_getInteract(CardDef *cardDef){
+    return cardDef->effect;
 };
 
-int CardDef_getStat(CardDef *cardDef) {return cardDef->stat;};
+int *CardDef_getStat(CardDef *cardDef) {return &cardDef->stat;};
+
+char *CardDef_getName(CardDef *cardDef) {return cardDef->name;};
