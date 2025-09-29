@@ -30,6 +30,55 @@ LibraryInstanceRenderObject *RenderObject_create(CardInstance *cardInstance, int
     return renderObject;
 };
 
+void render_select(int x, int y, float scale) {
+    int height = 22;
+    int width = 21;
+    // TOP
+    DrawRectangle(x - (2 * scale), y - (4 * scale), width * scale, scale, RED);
+    // LEFT
+    DrawRectangle(x - (2 * scale) - scale, y - (3 * scale), scale, height * scale, RED);
+    // BOTTOM
+    DrawRectangle(x - (2 * scale), y + (19 * scale), width * scale, scale, RED);
+    // RIGHT
+    DrawRectangle(x - (2 * scale) + (21 * scale), y - (3 * scale), scale, height * scale, RED);
+}
+
+void render_card(int x, int y, float scale){
+    // TOP
+    DrawRectangle(
+        x,
+        y - 2 * scale,
+        17 * scale,
+        scale,
+        WHITE
+    );
+    // LEFT
+    DrawRectangle(
+        x - scale,
+        y - scale,
+        scale,
+        18 * scale,
+        WHITE
+    );
+    //BOTTOM
+    DrawRectangle(
+        x,
+        y + 17 * scale,
+        17 * scale,
+        scale,
+        WHITE
+    );
+    //RIGHT
+    DrawRectangle(
+        x + 17 * scale,
+        y - scale,
+        scale,
+        18 * scale,
+        WHITE
+    );
+
+};
+
 void RenderObject_destroy(LibraryInstanceRenderObject *renderObject){
     if (!renderObject) return;
     free(renderObject);
@@ -37,6 +86,9 @@ void RenderObject_destroy(LibraryInstanceRenderObject *renderObject){
 
 void RenderObject_render(
     struct LibraryInstanceRenderObject *renderObject){
+    int scale = 5.f;
+    render_card(renderObject->x, renderObject->y, scale);
+    render_select(renderObject->x, renderObject->y, scale);
     DrawTextureEx(
         CardInstance_getSprite(renderObject->cardInstance),
         (Vector2){
@@ -44,7 +96,7 @@ void RenderObject_render(
             renderObject->y,
         },
         0.0f,
-        10.f,
+        scale,
         WHITE
     );
 };
