@@ -39,3 +39,5 @@ CardEffectFn CardDef_getInteract(CardDef *cardDef){
 int *CardDef_getStat(CardDef *cardDef) {return &cardDef->stat;};
 
 char *CardDef_getName(CardDef *cardDef) {return cardDef->name;};
+
+Texture2D CardDef_getSprite(CardDef *cardDef) {return cardDef->sprite;};
