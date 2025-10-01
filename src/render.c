@@ -16,8 +16,10 @@
 // NEED STRUCT DRAWINSTANCE
 struct LibraryInstanceRenderObject{
     CardInstance *cardInstance;
+    int isSelected;
     int x;
     int y;
+    Rectangle hitBox;
 };
 
 LibraryInstanceRenderObject *RenderObject_create(CardInstance *cardInstance, int x, int y){
@@ -26,6 +28,8 @@ LibraryInstanceRenderObject *RenderObject_create(CardInstance *cardInstance, int
     renderObject->cardInstance = cardInstance;
     renderObject->x = x;
     renderObject->y = y;
+    renderObject->isSelected = 0;
+    renderObject->hitBox = (Rectangle){x - 5, y - 10,  17 * 5, 18 * 5};
 
     return renderObject;
 };
@@ -84,11 +88,21 @@ void RenderObject_destroy(LibraryInstanceRenderObject *renderObject){
     free(renderObject);
 };
 
+Rectangle RenderObject_getHitbox(LibraryInstanceRenderObject *renderObject){
+    return renderObject->hitBox;
+}
+
+void RenderObject_flipSelected(LibraryInstanceRenderObject *renderObject){
+    renderObject->isSelected = !renderObject->isSelected;
+};
+
 void RenderObject_render(
     struct LibraryInstanceRenderObject *renderObject){
     int scale = 5.f;
     render_card(renderObject->x, renderObject->y, scale);
-    render_select(renderObject->x, renderObject->y, scale);
+    if (renderObject->isSelected){
+        render_select(renderObject->x, renderObject->y, scale);
+    }
     DrawTextureEx(
         CardInstance_getSprite(renderObject->cardInstance),
         (Vector2){

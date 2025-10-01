@@ -56,6 +56,13 @@ int main(void) {
     LibraryInstanceRenderObject *potionRenderObject = RenderObject_create(potion_1, 200, 100);
     LibraryInstanceRenderObject *weaponRenderObject = RenderObject_create(weapon_1, 350, 100);
     LibraryInstanceRenderObject *enemyRenderObject = RenderObject_create(enemy_1, 500, 100);
+    LibraryInstanceRenderObject *allCardDefRenderObjects[] = {
+        potionRenderObject,
+        weaponRenderObject,
+        enemyRenderObject
+    };
+       
+    Vector2 mousePos;
 
     while (!WindowShouldClose()){
         
@@ -63,9 +70,21 @@ int main(void) {
         BeginDrawing();
 
             ClearBackground(BLACK);
-            RenderObject_render(potionRenderObject);
-            RenderObject_render(weaponRenderObject);
-            RenderObject_render(enemyRenderObject);
+
+            mousePos = GetMousePosition();
+
+            size_t count = sizeof(allCardDefRenderObjects) / sizeof(allCardDefRenderObjects[0]);
+            for (size_t i = 0; i < count; i++) {
+                if (CheckCollisionPointRec(
+                        mousePos, 
+                        RenderObject_getHitbox(allCardDefRenderObjects[i])
+                )){
+                    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+                        RenderObject_flipSelected(allCardDefRenderObjects[i]);
+                    };
+                };
+                RenderObject_render(allCardDefRenderObjects[i]);
+            };
 
         EndDrawing();
     }
